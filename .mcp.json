@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "quo": {
+      "type": "http",
+      "url": "https://mcp.quo.com/mcp",
+      "note": "Official hosted Quo MCP server. Uses browser-based OAuth on first connection; no API key or local helper is required."
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "quo",
+  "version": "1.0.0",
+  "description": "Manage Quo business communications from Grok Build: send texts, work with contacts and tasks, review messages and call transcripts, and follow up on missed calls.",
+  "author": {
+    "name": "Quo",
+    "url": "https://www.quo.com"
+  },
+  "repository": "https://github.com/OpenPhone/quo-grok-plugin",
+  "homepage": "https://support.quo.com/core-concepts/integrations/mcp",
+  "license": "Apache-2.0",
+  "keywords": [
+    "quo",
+    "quo-mcp",
+    "quo-business-phone",
+    "openphone"
+  ]
+}
