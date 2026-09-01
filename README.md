@@ -1,6 +1,6 @@
 # Quo MCP for Grok Build
 
-Connect [Quo](https://www.quo.com) to Grok Build so you can work with business texts, contacts, tasks, call transcripts, and missed calls in plain language.
+Connect [Quo](https://www.quo.com) (formerly OpenPhone) to Grok Build so you can work with business texts, contacts, tasks, call transcripts, and missed calls in plain language.
 
 > [!WARNING]
 > Quo MCP is **not HIPAA compliant**. Do not use it to transmit protected health information (PHI).
