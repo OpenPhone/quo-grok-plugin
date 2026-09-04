@@ -2,9 +2,6 @@
 
 Connect [Quo](https://www.quo.com) (formerly OpenPhone) to Grok Build so you can work with business texts, contacts, tasks, call transcripts, and missed calls in plain language.
 
-> [!WARNING]
-> Quo MCP is **not HIPAA compliant**. Do not use it to transmit protected health information (PHI).
-
 This plugin adds Quo's official hosted MCP server. It does not install or execute a local binary. On first connection, Grok opens Quo's OAuth flow in your browser so you can choose the workspace and authorize access; no API key or environment variable is required.
 
 ## What you can do
