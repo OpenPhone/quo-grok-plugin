@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "quo",
   "version": "1.0.0",
-  "description": "Connect Quo to AI agents to send individual, group, or bulk SMS; manage contacts and tasks; review message history and call transcripts; and follow up on missed calls.",
+  "description": "Give your agent a phone number. Use Quo to send and review business texts, manage contacts and tasks, and follow up on missed calls.",
   "author": {
     "name": "Quo",
     "url": "https://www.quo.com"
