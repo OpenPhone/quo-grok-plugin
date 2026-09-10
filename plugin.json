@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "quo",
+  "version": "1.0.0",
+  "description": "Connect Quo to AI agents to send individual, group, or bulk SMS; manage contacts and tasks; review message history and call transcripts; and follow up on missed calls.",
+  "author": {
+    "name": "Quo",
+    "url": "https://www.quo.com"
+  },
+  "repository": "https://github.com/OpenPhone/quo-grok-plugin",
+  "homepage": "https://support.quo.com/core-concepts/integrations/mcp",
+  "license": "Apache-2.0",
+  "keywords": [
+    "quo",
+    "quo-mcp",
+    "business-phone",
+    "sms",
+    "contacts",
+    "tasks"
+  ]
+}
