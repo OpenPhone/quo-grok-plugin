@@ -35,6 +35,28 @@ Create a follow-up task for the last missed call and assign it to Jordan.
 Send Alex: "I'm running five minutes late."
 ```
 
+## Included skills
+
+The plugin includes three Quo workflows in `skills/`:
+
+| Skill | What it does |
+| --- | --- |
+| [Quo Conversation Insight Log](skills/quo-conversation-insight-log/SKILL.md) | Reviews recent messages, transcribed calls, missed calls, and voicemails to produce a prioritized, read-only insight log. |
+| [Quo 3-Month Drip](skills/quo-3-month-drip/SKILL.md) | Finds previously engaged contacts who have gone quiet and drafts personalized re-engagement texts for review. |
+| [Quo Voicemail Triage](skills/quo-voicemail-triage/SKILL.md) | Reviews voicemails, creates internal follow-up tasks after guided setup, and drafts replies for review. |
+
+Example requests:
+
+```text
+Create a prioritized insight log from my Quo conversations this week.
+Find customers we haven't spoken with in three months and draft check-in texts.
+Set up voicemail triage for my main Quo line.
+```
+
+Drip and Voicemail Triage require explicit approval before sending texts. Voicemail Triage stores its settings in a Quo task; recurring runs require scheduling support in the host and a configured schedule. Installing the skill does not start a schedule.
+
+The root Agent Plugin format discovers skills from `skills/<name>/SKILL.md`. Each skill includes its supporting Markdown references and templates.
+
 ## Installation
 
 Once the plugin is listed in the xAI marketplace, open `/plugins` in Grok Build, search for **Quo**, and install it. Enable and trust the plugin so Grok can connect to the bundled MCP server.

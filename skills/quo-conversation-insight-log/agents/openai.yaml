@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quo Conversation Insight Log"
+  short_description: "Prioritize recent customer calls and messages"
+  default_prompt: "Use $quo-conversation-insight-log to review my recent Quo calls and messages and create a prioritized passive insight log."
