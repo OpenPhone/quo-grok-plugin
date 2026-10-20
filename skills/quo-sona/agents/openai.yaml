@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quo Sona"
+  short_description: "Delegate calls, texts, and business knowledge to Sona"
+  default_prompt: "Use $quo-sona to help me delegate a call or SMS conversation to Sona, or update what Sona knows about my business."

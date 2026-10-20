@@ -1,12 +1,12 @@
 # Quo MCP for Grok Build
 
-Connect [Quo](https://www.quo.com) (formerly OpenPhone) to Grok Build so you can work with business texts, contacts and contact notes, tasks, call transcripts, and missed calls in plain language. Have Sona handle SMS conversations, manage inbox settings, keep Sona's business knowledge current, and share feedback with the Quo product team.
+Connect [Quo](https://www.quo.com) (formerly OpenPhone) to Grok Build so you can work with business texts, contacts and contact notes, tasks, call transcripts, and missed calls in plain language. Have Sona make phone calls and handle SMS conversations, manage inbox settings, keep Sona's business knowledge current, and share feedback with the Quo product team.
 
 This plugin adds Quo's official hosted MCP server. It does not install or execute a local binary. On first connection, Grok opens Quo's OAuth flow in your browser so you can choose the workspace and authorize access; no API key or environment variable is required.
 
 ## What you can do
 
-The production Quo MCP server provides these 27 tools:
+The production Quo MCP server provides these 34 tools:
 
 | Tool | Capability |
 | --- | --- |
@@ -14,9 +14,16 @@ The production Quo MCP server provides these 27 tools:
 | `list-inboxes` | List the phone-number inboxes available in your Quo workspace |
 | `get-inbox-settings` | Read an inbox's name, business hours, timezone, automatic call recording, and recording-disclosure settings |
 | `update-inbox-settings` | Change an inbox's name, business hours, or call recording settings after confirmation; requires inbox-owner or workspace-admin access |
+| `get-a2p-registration` | Read the workspace's US carrier-registration status and next step |
+| `create-a2p-registration` | Create an unsubmitted carrier-registration draft |
+| `update-a2p-registration` | Change the workspace's draft carrier registration |
+| `submit-a2p-registration` | Review and submit a carrier-registration draft through a separate, billed confirmation flow |
 | `send-message` | Send one SMS to one recipient; does not handle replies |
 | `send-group-message` | Send one shared group SMS to 2–10 recipients who can see one another |
 | `send-bulk-messages` | Send separate private SMS messages to 2–40 recipients, with shared text or personalized text per recipient |
+| `start-agent-call` | Have Sona place a real phone call for a confirmed task, with optional voicemail handling and a duration limit |
+| `get-agent-call` | Check a Sona call's status, summary, and collected data to determine its outcome |
+| `cancel-agent-call` | Stop a Sona call, hanging up if it is in progress |
 | `start-agent-conversation` | Have Sona text one person and handle the back-and-forth toward a confirmed goal |
 | `get-agent-conversation` | Check a Sona SMS conversation's status, outcome summary, and collected data |
 | `cancel-agent-conversation` | Stop a Sona SMS conversation; texts already sent remain sent |
@@ -42,6 +49,8 @@ Contact notes are internal: adding or updating a note does not send anything to 
 
 `submit-feedback` sends feedback to Quo's product team. It preserves the user's feedback and relevant context; it is not a way to message a customer.
 
+Carrier registration requires a workspace owner or admin and an active paid subscription. Creating or editing a draft does not submit it. Submission requires reviewing the returned draft and notices, then explicitly confirming the billed, irreversible submission.
+
 Example requests:
 
 ```text
@@ -55,13 +64,18 @@ Create a follow-up task for the last missed call and assign it to Jordan.
 Send Alex: "I'm running five minutes late."
 Submit feedback to Quo: "I'd like to search contact notes by keyword."
 Have Sona text Alex to confirm whether Tuesday at 2pm America/Toronto works for the consultation.
+Have Sona call our supplier to confirm order 4821's delivery window; collect alternatives if the agreed time is unavailable.
+Did Sona's call achieve the task? Show what was agreed and anything still unresolved.
+Stop Sona's current call to our supplier.
 Show my Main Line's business hours and call recording settings.
 Change Main Line's Friday hours to 9am–3pm in America/Toronto, keeping the other days unchanged.
 Ask Sona to update our business knowledge: we are now closed on Sundays.
 Mark the conversations we just reviewed as done.
 ```
 
-## Sona conversations, knowledge, and inbox settings
+## Sona calls, conversations, knowledge, and inbox settings
+
+Use `start-agent-call` for a real phone call. Confirm the from number, recipient, task, and voicemail behavior before dialing. Each call uses 50 automation credits; a call ending within 15 seconds is free. Voicemail defaults to hanging up; leaving a message requires approval of that behavior. Calls last up to 300 seconds after answering by default, configurable up to 600 seconds. Reuse the same `idempotencyKey` after a timeout or retry to avoid duplicate calls. Check `get-agent-call` about every 10 seconds until final, then read its summary: `completed` alone does not prove a person answered or the task succeeded. Use `cancel-agent-call` to stop a live call.
 
 Use `send-message` for one specific text. Use `start-agent-conversation` when Sona should write the texts and handle replies until a goal is reached. Confirm the sending inbox, recipient, goal, and relevant details before starting. Reuse the same `idempotencyKey` for retries of that conversation. A teammate's reply takes over from Sona, a recipient's STOP ends the exchange, and `cancel-agent-conversation` stops it explicitly. Check progress with `get-agent-conversation` every few minutes and read the texts with `fetch-messages`. A completed status alone does not establish that the goal was achieved; read the summary.
 
@@ -75,10 +89,11 @@ Sona's tools are in beta. Business-detail corrections belong in `ask-knowledge-a
 
 ## Included skills
 
-The plugin includes three Quo workflows in `skills/`:
+The plugin includes four Quo workflows in `skills/`:
 
 | Skill | What it does |
 | --- | --- |
+| [Quo Sona](skills/quo-sona/SKILL.md) | Helps turn goals into clear Sona call or SMS tasks, confirm actions, check or cancel runs, recover without duplicates, and review changes to shared business knowledge. |
 | [Quo Conversation Insight Log](skills/quo-conversation-insight-log/SKILL.md) | Reviews recent messages, transcribed calls, missed calls, and voicemails to produce a prioritized, read-only insight log. |
 | [Quo 3-Month Drip](skills/quo-3-month-drip/SKILL.md) | Finds previously engaged contacts who have gone quiet and drafts personalized re-engagement texts for review. |
 | [Quo Voicemail Triage](skills/quo-voicemail-triage/SKILL.md) | Reviews voicemails, creates internal follow-up tasks after guided setup, and drafts replies for review. |
@@ -89,7 +104,10 @@ Example requests:
 Create a prioritized insight log from my Quo conversations this week.
 Find customers we haven't spoken with in three months and draft check-in texts.
 Set up voicemail triage for my main Quo line.
+Help me have Sona call a customer to reschedule, with clear fallback options if they cannot make the proposed times.
 ```
+
+The Sona skill includes separate guides for [phone calls](skills/quo-sona/references/phone-calls.md), [SMS conversations](skills/quo-sona/references/sms-conversations.md), and [business knowledge](skills/quo-sona/references/business-knowledge.md). It asks for missing details that affect the task, distinguishes a run finishing from achieving the goal, and requires approval before starting outreach or publishing a knowledge draft.
 
 Drip and Voicemail Triage require explicit approval before sending texts. Voicemail Triage stores its settings in a Quo task; recurring runs require scheduling support in the host and a configured schedule. Installing the skill does not start a schedule.
 
@@ -114,7 +132,7 @@ Tools are discovered from the hosted MCP server; this plugin does not maintain a
 - The plugin connects only to `https://mcp.quo.com/mcp`.
 - Authentication uses Quo's hosted OAuth flow. The plugin does not read local credentials, secrets, `.env` files, or unrelated filesystem data.
 - Once authorized, Grok can read the Quo workspace data needed by the tools above and can perform write actions such as sending messages, creating or updating contacts, contact notes, and tasks, and submitting feedback to Quo. Review recipients and content before approving consequential actions. The included skills describe their own behavior, including Voicemail Triage's internal task creation after guided setup.
-- Sona can send and reply to texts on the business's behalf after the user confirms the conversation. Inbox-settings changes and publishing Sona knowledge require confirmation and the applicable owner or admin permissions.
+- Sona can place calls and send and reply to texts on the business's behalf after the user confirms the task. Inbox-settings changes and publishing Sona knowledge require confirmation and the applicable owner or admin permissions.
 - A group message exposes every recipient's phone number and replies to the whole group and cannot be undone. Use `send-bulk-messages` when recipients should receive separate private messages.
 - Data returned by Quo is processed in your Grok session and is subject to the terms and privacy policies of the services you use.
 - Quo may collect service usage and diagnostic events as described in the [Quo Privacy Policy](https://www.quo.com/privacy).
@@ -124,6 +142,7 @@ Sending messages requires prepaid Quo credits and counts as API messaging. Call 
 ## Support and resources
 
 - [Quo MCP documentation](https://support.quo.com/core-concepts/integrations/mcp)
+- [Supported MCP tools and Sona phone calls](https://www.quo.com/docs/2026-03-30/mcp/tools#phone-calls)
 - [Quo Privacy Policy](https://www.quo.com/privacy)
 - [Quo Support](https://support.quo.com)
 - [Report a plugin issue](https://github.com/OpenPhone/quo-grok-plugin/issues)
